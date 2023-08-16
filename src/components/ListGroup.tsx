@@ -1,20 +1,27 @@
-import { MouseEvent } from "react";
+import { useState } from "react";
 
-function ListGroup() {
-  const items = ["New york", "San Fransisco", "Tokyo", "London", "Paris"];
 
-  // since we are declaring a brand new function, ts compiler does not know the type of the parameter (event), so we need to specify it's datatype
-  const clickHandler = (event: MouseEvent) => console.log(event); // type anototation for typescript
+interface ListGroupProps {
+  items: string[]   // means an array of strings
+  heading: string   //  heading of type string
+}
+
+function ListGroup({items, heading} : ListGroupProps) {
+
+  // const arr = useState(-1)
+  // Using array destructuring
+  const [selectedIndex, setSelectedIndex] = useState(-1); // Initialize selectedIndex variable. useState returns an array with two elements inside it
 
   return (
     <>
-      <h1>List</h1>
+      <h1>{heading}</h1>
       <ul className="list-group">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <li 
           key={item} 
-          className="list-group-item" 
-          onClick={clickHandler}>
+          className={ selectedIndex === index ? "list-group-item active" : "list-group-item"}
+          onClick={() => {setSelectedIndex(index)}} 
+          >
             {" "}
             {item}{" "}
           </li>
