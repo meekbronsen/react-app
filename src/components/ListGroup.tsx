@@ -1,16 +1,14 @@
 import { useState } from "react";
 
-
 interface ListGroupProps {
-  items: string[]   // means an array of strings
-  heading: string   //  heading of type string
+  items: string[];
+  heading: string;
+  onSelectItem: (Item:string) => void;
 }
 
-function ListGroup({items, heading} : ListGroupProps) {
+function ListGroup({items, heading, onSelectItem} : ListGroupProps) {
 
-  // const arr = useState(-1)
-  // Using array destructuring
-  const [selectedIndex, setSelectedIndex] = useState(-1); // Initialize selectedIndex variable. useState returns an array with two elements inside it
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   return (
     <>
@@ -20,7 +18,10 @@ function ListGroup({items, heading} : ListGroupProps) {
           <li 
           key={item} 
           className={ selectedIndex === index ? "list-group-item active" : "list-group-item"}
-          onClick={() => {setSelectedIndex(index)}} 
+          onClick={() => {
+            setSelectedIndex(index)
+            onSelectItem(item)
+          }} 
           >
             {" "}
             {item}{" "}
