@@ -1,11 +1,13 @@
-import Alert from './components/Alert'
+import Alert from "./components/exercise/AlertComponent";
+import Button from "./components/exercise/ButtonComponent";
 
-function App(){
-  return <div>
-     <Alert>
-      <strong>Hello</strong> world
-    </Alert>
+function App() {
+  return (
+    <div>
+      <Alert></Alert>
+      <Button></Button>
     </div>
+  );
 }
 
 export default App;
