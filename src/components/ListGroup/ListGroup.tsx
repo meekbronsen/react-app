@@ -1,4 +1,6 @@
 import { useState } from "react";
+import './ListGroup.css'
+
 
 interface ListGroupProps {
   items: string[];
@@ -18,9 +20,8 @@ function ListGroup({items, heading, onSelectItem} : ListGroupProps) {
           <li 
           key={item} 
           className={ selectedIndex === index ? "list-group-item active" : "list-group-item"}
-          onClick={() => {
+          onClick={() => { onSelectItem(item) 
             setSelectedIndex(index)
-            onSelectItem(item)
           }} 
           >
             {" "}
