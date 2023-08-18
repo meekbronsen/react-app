@@ -1,16 +1,12 @@
-import {useState} from 'react';
-
-function Alert() {
-
-const [ style, assignStyle] = useState('') 
+interface AlertProps{
+  onClose: ()=> void;
+}
+function Alert({onClose}: AlertProps) {
 
   return (
-    <>
-    <div className={`alert alert-warning alert-dismissible ${style}`} >
-       Alert <button  className="btn-close" onClick={() => assignStyle('fade')}></button>
+    <div className="alert alert-warning alert-dismissible" > Alert
+      <button type="button" className="btn-close" onClick={onClose} ></button>
     </div>
-    <button type="button" className='btn btn-primary' onClick={() => assignStyle('show')}> My Button </button>
-    </>
   );
 }
 
