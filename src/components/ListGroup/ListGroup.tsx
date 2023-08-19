@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const List = styled.ul` 
   list-style: none;
-  `
+`
   
 const ListItem = styled.li<ListItemProps> /* Defining the shape of the prop */` 
   padding: 5px 0;
@@ -32,13 +32,11 @@ function ListGroup({items, heading, onSelectItem} : ListGroupProps) {
           <ListItem
           active={index === selectedIndex} 
           key={item} 
-          className={ selectedIndex === index ? "list-group-item active" : "list-group-item"}
           onClick={() => { onSelectItem(item)  
             setSelectedIndex(index)
           }} 
           >
-            {" "}
-            {item}{" "}
+            {item}
           </ListItem>
         ))}
       </List>
