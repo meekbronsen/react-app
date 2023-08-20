@@ -4,18 +4,18 @@
 import {useState} from 'react'
 
 function App() {
-const [customer, setCustomer] = useState({
-  name: 'John',
-  address: {
-    city: 'Los Angeles',
-    zipCode: 19089
-  }
-})
+  const [tags, setTags] = useState(['happy', 'cheerful']);
 
-const handler = () =>{
-  // setting address to a new one and spreading ...customer.address inside it to make a new reference
-  setCustomer({...customer, address:{ ...customer.address, /* the modify zipcode */zipCode: 95113}})
-}
+  const hander = () => {
+    // spreading the tags and adding a new one called exciting
+    setTags([...tags, 'exciting']);
+
+    // Removing 'happy'
+    setTags(tags.filter((tag) => tag !== 'happy'))
+
+    // Updating
+    setTags( tags.map((tag) => tag === 'happy' ? 'happiness' : tag))
+  }
   return (
     <div>
     </div>
