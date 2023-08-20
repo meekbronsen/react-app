@@ -1,22 +1,17 @@
-// When our button is clicked, we want to mark Bug as fixed
-
-import {useState} from 'react'
+import { useState } from "react";
+import NavBar from "./components/NavBar";
+import Cart from "./components/Cart";
 
 function App() {
-  const [bugs, setBugs] = useState([
-    {id:1, title: 'Bug 1', fixed: false},
-    {id:2, title: 'Bug 2', fixed: false}
+  const [ cartItems, setCartItems] = useState(['product 1','product 2']);
 
-  ]);
-
-  const hander = () => {
-      setBugs( bugs.map((bug) => bug.id === 1 ? {...bug, fixed: true} : bug ))
-  }
   return (
+
     <div>
+      <NavBar cartItemsCount={cartItems.length}></NavBar>
+      <Cart cartItems={cartItems} onClear={() => setCartItems([])}></Cart>
     </div>
   );
 }
 
-// prefer a flat structure to a nested one.
 export default App;
