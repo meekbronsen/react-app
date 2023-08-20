@@ -1,12 +1,13 @@
-import Message from './components/Message'
+import Like from "./components/Like/Like";
 
 function App() {
 
+  const eventLike = () => console.log('liked')
+  const eventUnlike = () => console.log('unliked')
+
   return (
     <div>
-      <Message/>
-      <Message/>
-      <Message/>
+      <Like like={eventLike} unlike={eventUnlike} ></Like>
     </div>
   );
 }
