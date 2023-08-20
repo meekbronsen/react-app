@@ -1,20 +1,16 @@
-// Make sure that the new state object is completely independent of the previous.
-// So when using the spread operator, address is copied by reference thust will remain the same even during state change.
+// When our button is clicked, we want to mark Bug as fixed
 
 import {useState} from 'react'
 
 function App() {
-  const [tags, setTags] = useState(['happy', 'cheerful']);
+  const [bugs, setBugs] = useState([
+    {id:1, title: 'Bug 1', fixed: false},
+    {id:2, title: 'Bug 2', fixed: false}
+
+  ]);
 
   const hander = () => {
-    // spreading the tags and adding a new one called exciting
-    setTags([...tags, 'exciting']);
-
-    // Removing 'happy'
-    setTags(tags.filter((tag) => tag !== 'happy'))
-
-    // Updating
-    setTags( tags.map((tag) => tag === 'happy' ? 'happiness' : tag))
+      setBugs( bugs.map((bug) => bug.id === 1 ? {...bug, fixed: true} : bug ))
   }
   return (
     <div>
