@@ -1,28 +1,26 @@
+// Make sure that the new state object is completely independent of the previous.
+// So when using the spread operator, address is copied by reference thust will remain the same even during state change.
+
 import {useState} from 'react'
 
 function App() {
-  const [drink, setDrink] = useState({
-    title: "Americano",
-    price: 5
-  })
+const [customer, setCustomer] = useState({
+  name: 'John',
+  address: {
+    city: 'Los Angeles',
+    zipCode: 19089
+  }
+})
 
-// copying the object as an update
-// const handleClick = () => {
-//   const newDrink = {
-//     title: drink.title,
-//     price: 6
-//   }
-//   setDrink(newDrink)
-// }
-
+const handler = () =>{
+  // setting address to a new one and spreading ...customer.address inside it to make a new reference
+  setCustomer({...customer, address:{ ...customer.address, /* the modify zipcode */zipCode: 95113}})
+}
   return (
     <div>
-      {drink.price}
-      {/* <button onClick={handleClick}> My Button </button> */}
-      {/* using the spread operator if the object being copied is extensive */}
-      <button onClick={ () =>setDrink({...drink, price: 7})}> </button>
     </div>
   );
 }
 
+// prefer a flat structure to a nested one.
 export default App;
