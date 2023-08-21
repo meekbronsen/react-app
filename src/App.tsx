@@ -1,23 +1,18 @@
 import { useState } from "react";
+import Expandable from "./components/Expandable";
 
 function App() {
- const [cart, setCart]  = useState({
-  discount: .1,
-  items: [
-    {id: 1, title: 'Product 1', quantity: 1},
-    {id: 2, title: 'Product 2', quantity: 1}
-  ]
- })
-
-  const handler = () => {
-    setCart({...cart, items: cart.items.map( (item) =>  item.id === 1 ? {...item, quantity: 2} : item ) })
-    console.log(cart.items)
-  }
-
+  
   return (
     <div>
-
-      <button onClick={handler}> Update quantity </button>
+      <Expandable maxChar={20} >
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem quis
+        accusamus, dignissimos itaque voluptatibus vero veniam amet repellat
+        culpa porro, sint asperiores quam, distinctio iure quos fuga cupiditate
+        iste in delectus! Sint beatae aspernatur illum ex quas cum vitae harum,
+        placeat officiis a odio sequi quia magnam debitis, perspiciatis
+        repellat?
+      </Expandable>
     </div>
   );
 }
