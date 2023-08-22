@@ -1,13 +1,14 @@
-import React from "react";
+import React, { FormEvent } from "react";
 
 const Form = () => {
-  return (
-    // onsubmit is an event
-    // when we submit an HTML form, the form is posted to the server, so we get a full page reload.
-    <form onSubmit={(event) => {
+    // if code in onSubmit gets complex, we can create a handler to hold all
+    const handler = (event: FormEvent) => {
         event.preventDefault()  // calling event object's preventDefault to prevent default behaviour
         console.log('submitted')
-        }} >
+    }
+
+    return(
+    <form onSubmit={handler}>
       <div className="mb-3">
         <label htmlFor="name" className="form-label">username</label>
         <input id="name" type="text" className="form-control" />
