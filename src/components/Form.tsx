@@ -1,21 +1,19 @@
-import React, { FormEvent, useRef } from "react";
+import { FormEvent, useState } from "react";
 
 const Form = () => {
-    // useRef is another hook in react like useState. it can be used to reference a DOM element.
-    // we gonna to use it to read value in a form on submission.
-    
-    // nameRef has a single property called current that returns the DOM element we are referencing
-    const nameRef = useRef<HTMLInputElement>(null); // <HTMLInputElement> to clear the value error by showing typescript compiler which element we're referencing
-    const ageRef =  useRef<HTMLInputElement>(null);
-    const person = { name: '', age: 0}
+    // Another way of collecting the data
+    // All input elements have an onChange event that is triggered every time the user types a key stroke
+    // The problem with this is, everytime a user types a character the state changes and re-rendered
+    // Since input element has it's own value, it may fall out of sync with person, so to make input rely on person : value={person.name}
+    // We are refering the input field as a controlled component, because it's state is entirely controlled by react.
+
+    const [person, setPerson] = useState({
+        name:'',
+        age: ''
+    })
 
     const handler = (event: FormEvent) => {
         event.preventDefault()  
-        if (nameRef.current !== null)
-            // console.log(nameRef.current.value) // value refers to the data inside the input field
-            person.name = nameRef.current.value
-        if (ageRef.current !== null)
-            person.age= parseInt(ageRef.current.value) // parseInt is used to convert string into a number
         console.log(person)
     }
 
@@ -23,13 +21,13 @@ const Form = () => {
     <form onSubmit={handler}>
       <div className="mb-3">
         <label htmlFor="name" className="form-label">username</label>
-        <input ref={nameRef} id="name" type="text" className="form-control" />
+        <input value={person.name} onChange={(event) => setPerson({...person, name: event.target.value})  } id="name" type="text" className="form-control" />
       </div>
       <div className="mb-3">
         <label htmlFor="age" className="form-label">Age</label>
-        <input ref={ageRef} id="age" type="number" className="form-control" />
+        <input value={person.age} onChange={(event) => setPerson({...person, age: parseInt(event.target.value) })} id="age" type="number" className="form-control" />
       </div>
-      <button  type="submit" className="btn btn-primary"> Submit </button>
+      <button type="submit" className="btn btn-primary"> Submit </button>
     </form>
   );
 };
