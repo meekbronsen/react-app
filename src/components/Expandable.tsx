@@ -5,21 +5,14 @@ interface Props {
   maxChar?: number;
 }
 
-const Expandable = ({  children, maxChar = 10 }: Props) => {
-    const [ chars, setChars] = useState( false )
-    const [ button, setButton] = useState( false )
+const Expandable = ({ children, maxChar = 10 }: Props) => {
+  const [isExpanded, setExpand] = useState(false)
+  if (children.length <= maxChar) { return <p>{ children } </p>}
 
-    const collapse = () => {
-        setChars(true)
-        setButton(true)
-    }
-    const expand = () => {
-        setChars(false)
-        setButton(false)
-    }
+  const text =  isExpanded ? children : children.substring(0, maxChar)
+
   return <div>
-    { chars && children.split("").slice(0, maxChar + 1).join("") || children } 
-    ...{ button && <button onClick={expand}> more </button> || <button onClick={collapse}> less </button>  }
+    <p> {text}... <button onClick={ () => setExpand( !isExpanded )} > { isExpanded ? 'less' : 'more'} </button></p>
   </div>;
 };
 
