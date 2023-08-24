@@ -1,28 +1,47 @@
-// Managing Forms with react hook form
-import { FormEvent, useState } from "react";
+// Validating forms using react hook forms and logging errors.
+
+// formState: {errors} nested destructuring
+// 'errors.name?.type' the question ' ?.type' is called optional chaining in js
+
 import { useForm } from "react-hook-form";
 
-const Form = () => {
-  // const form = useForm() // calling useform to get a form object
-  const { register, handleSubmit } = useForm(); // Destructring the form object --form.register() = register
-  // console.log(register("age")); // this shows that register is an object with four attributes
+// to help with autocompletion of our error object we need to define the shape of this form using interface
+interface FormData{
+  name: string
+  age: number
+}
 
-  const onSubmit = (data: FieldValues) => console.log(data)  // since typescript does not recognize 'data', we add FieldValues to ref
+const Form = () => {
+  // Grab a property called form state from useForm obj. It monitors the state of the form
+  const { register, handleSubmit, formState: {errors} } = useForm<FormData>();
+
+  // console.log(formState.errors)  // logs an object with properties like {name, message: ""  type: 'minlength'} etc if there is an error
+  console.log(errors)
+
+
+  const onSubmit = (data: FieldValues) => console.log(data);
 
     return (
-    // <form onSubmit={ handleSubmit((data) => console.log(data) )}> {/* handleSubmit() takes a submit-handler, it recives the data filled in the form*/}
-    <form onSubmit={ handleSubmit(onSubmit) }> 
+    <form onSubmit={ handleSubmit(onSubmit)}> 
+
+    {/* username */}
       <div className="mb-3">
         <label htmlFor="name" className="form-label">
           username
         </label>
         <input
-        {...register('name')}  // spreading the register object. All the four attributes will be added to this input field
+        {...register('name',{required: true , minLength: 3})} // is like updating objects by adding attributes
           id="name"
           type="text"
           className="form-control"
         />
+
+        {/* Error message to be displayed */}
+        {errors.name?.type === 'required' && <p className="text-danger"> username is required</p> }
+        {errors.name?.type === 'minLength' && <p className="text-danger"> must be atleast 3 characters</p>}
       </div>
+
+      {/* age */}
       <div className="mb-3">
         <label htmlFor="age" className="form-label">
           Age
@@ -34,9 +53,10 @@ const Form = () => {
           className="form-control"
         />
       </div>
+
+      {/* submit button */}
       <button type="submit" className="btn btn-primary">
-        {" "}
-        Submit{" "}
+        Submit
       </button>
     </form>
   );
