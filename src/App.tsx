@@ -1,20 +1,17 @@
-import { useEffect, useRef, useState } from "react";
-import ProductList from "./components/ProductList";
+import { useEffect } from "react";
+
+const connnect = () => console.log("Connecting...");
+const disconnect = () => console.log("Disconnecting...");
 
 function App() {
-  // Trying to update the state on selection
-  const [category, setCategory] = useState("");
-  
-  return (
-    <div>
-      <select className="form-select" onChange={(event) => setCategory(event.target.value)}>
-        <option value=""></option>
-        <option value="Clothing">Clothing</option>
-        <option value="Household">Household</option>
-      </select>
-      <ProductList category={category}></ProductList>
-    </div>
-  );
+  useEffect(() => {
+    connnect();
+
+    // clean up code. Undos whatever the effect was doing. Like if your subscribed to something, clean up will unsubscribe.
+    return () => disconnect();
+  });
+
+  return <div></div>;
 }
 
 export default App;
