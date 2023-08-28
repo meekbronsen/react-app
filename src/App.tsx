@@ -1,25 +1,18 @@
-import { useEffect, useRef } from "react";
-
-// The code below is changing something outside the component making it not a pure component. To make it pure, we move it inside useEffect()
-// if (ref.current) ref.current.focus();
-// We can only call the useEffect hook at the top level of our components, so we cannot call it inside loops and if statements  
+import { useEffect, useRef, useState } from "react";
+import ProductList from "./components/ProductList";
 
 function App() {
-  const ref = useRef<HTMLInputElement>(null);
+  // Trying to update the state on selection
+  const [category, setCategory] = useState("");
   
-// The function that we pass inside will be called after each render
-  useEffect(() =>{
-    // Side Effect
-    if (ref.current) ref.current.focus();
-  } )
-
-  useEffect(() => {
-    document.title = 'My App'
-  })
   return (
     <div>
-      <input ref={ref} type="text" className="form-control" />
-
+      <select className="form-select" onChange={(event) => setCategory(event.target.value)}>
+        <option value=""></option>
+        <option value="Clothing">Clothing</option>
+        <option value="Household">Household</option>
+      </select>
+      <ProductList category={category}></ProductList>
     </div>
   );
 }
