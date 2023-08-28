@@ -1,28 +1,26 @@
-import ExpenseFilter from './ExpenseTracker/ExpenseFilter'
-import ExpenseForm from './ExpenseTracker/ExpenseForm';
-import ExpenseList from './ExpenseTracker/ExpenseList'
-import {useState} from 'react'
+import { useEffect, useRef } from "react";
+
+// The code below is changing something outside the component making it not a pure component. To make it pure, we move it inside useEffect()
+// if (ref.current) ref.current.focus();
+// We can only call the useEffect hook at the top level of our components, so we cannot call it inside loops and if statements  
 
 function App() {
-  const [ selectedCategory, setCategory] =  useState('');
-  const [expenses, setExpenses] = useState([
-   { id: 1 , description: 'milk', amount: 5, category: 'Groceries'},
-   { id: 2 , description: 'Hammer', amount: 2, category: 'Utilities'},
-   { id: 3 , description: 'Harry Potter', amount: 10, category: 'Entertainment'}
-  ])
+  const ref = useRef<HTMLInputElement>(null);
+  
+// The function that we pass inside will be called after each render
+  useEffect(() =>{
+    // Side Effect
+    if (ref.current) ref.current.focus();
+  } )
 
-  const handler = (id: number) => setExpenses(expenses.filter( (order) => order.id !== id )) 
-
-  const visibleExpenses = selectedCategory ? expenses.filter((expense) => expense.category === selectedCategory) : expenses
-
+  useEffect(() => {
+    document.title = 'My App'
+  })
   return (
-    <>
-      <ExpenseForm onSubmit={(expense) => setExpenses( [...expenses,{ ...expense, id: expenses.length + 1}] )}></ExpenseForm>
-      <div className='m-4'>
-        <ExpenseFilter  onSelectCategory={(category) => setCategory(category)}></ExpenseFilter>
-      </div>
-      <ExpenseList expenses={visibleExpenses} onDelete={handler}></ExpenseList>
-    </>
+    <div>
+      <input ref={ref} type="text" className="form-control" />
+
+    </div>
   );
 }
 
