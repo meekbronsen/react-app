@@ -3,8 +3,6 @@ import ExpenseForm from './ExpenseTracker/ExpenseForm';
 import ExpenseList from './ExpenseTracker/ExpenseList'
 import {useState} from 'react'
 
-export const categories = [ 'Groceries', 'Utillities', 'Entertainment'] 
-
 function App() {
   const [ selectedCategory, setCategory] =  useState('');
   const [expenses, setExpenses] = useState([
@@ -19,8 +17,7 @@ function App() {
 
   return (
     <>
-    
-      <ExpenseForm></ExpenseForm>
+      <ExpenseForm onSubmit={(expense) => setExpenses( [...expenses,{ ...expense, id: expenses.length + 1}] )}></ExpenseForm>
       <div className='m-4'>
         <ExpenseFilter  onSelectCategory={(category) => setCategory(category)}></ExpenseFilter>
       </div>
