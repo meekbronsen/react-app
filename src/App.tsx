@@ -1,17 +1,23 @@
-import { useEffect } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const connnect = () => console.log("Connecting...");
-const disconnect = () => console.log("Disconnecting...");
+// Adding autocompletion and type saftey using typescript/
+interface User{
+  id: number;
+  name: string;
+}
 
 function App() {
+  const [users, setUsers] = useState<User[]>([]);
+
   useEffect(() => {
-    connnect();
-
-    // clean up code. Undos whatever the effect was doing. Like if your subscribed to something, clean up will unsubscribe.
-    return () => disconnect();
-  });
-
-  return <div></div>;
+    // axios.get<User[]>("https://jsonplaceholder.typicode.com/users").then(response => console.log(response.data[0].name));
+    // instead of console.log
+    axios.get<User[]>("https://jsonplaceholder.typicode.com/users").then(response => setUsers(response.data));
+  }, []);
+  return <div>
+    {users.map((user) => <li key={user.id}>{ user.name }</li> )}
+  </div>;
 }
 
 export default App;
