@@ -1,4 +1,4 @@
-import axios, { AxiosError, CanceledError } from "axios";
+import axios, { CanceledError } from "axios";
 import { useEffect, useState } from "react";
 
 interface User {
@@ -42,34 +42,43 @@ function App() {
       });
   };
 
-  // Still Using Optimistic update changing the UI first
   const addUser = () => {
-    const originalUsers = [...users]; // storing the originallist of users in a new list.
+    const originalUsers = [...users];
     const newUser = {
       id: 0,
       name: "Meek",
     };
     setUsers([newUser, ...users]);
-    // Updating tthe data on the server
     axios
-      .post("https://jsonplaceholder.typicode.com/users/", newUser)
-      // .then((response) => setUsers([response.data, ...users]))
-      // another way to rewrite the code above, is by destructuring the response object and extracting the data object
-      // the savedUser is a variable that data is using, we do this because there can be many response data and data is  generic name
+      .post("https://jsonplaceholder.typicode.com/users", newUser)
       .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
       .catch((err) => {
         setError(err.message);
         setUsers(originalUsers);
       });
   };
+  // Updating users in the UI
+  const updateUser = (user: User) => {
+    const originalUsers = [...users]
+    const updatedUser = { ...user, name: user.name + '!'};
+    setUsers(users.map(u => u.id === user.id ? updatedUser:u))
+    
+    // Now the server to save the changes
+    // put and patch, we use the put method for replacing an object(could be a record), we use patch to update it's properties, some backend may not support the patch method
+    axios.patch('https://jsonplaceholder.typicode.com/users/' + user.id, updateUser) // we pass the updatedUser user as second argument to the patch method
+    .catch((err) => {
+      setError(err.message);
+      setUsers(originalUsers)
+    })
+  }
 
   return (
     <>
       {error && <p className="text-danger">{error}</p>}
       {isLoading && <div className="spinner-border"></div>}
-      <button className="btn btn-primary mb-3" onClick={addUser}>
-        Add
-      </button>
+        <button className="btn btn-primary mb-3" onClick={addUser}>
+          Add
+        </button>
       <ul className="list-group">
         {users.map((user) => (
           <li
@@ -78,12 +87,15 @@ function App() {
           >
             <p>{user.id}</p>
             {user.name}
-            <button
-              onClick={() => deleteUser(user)}
-              className="btn btn-outline-danger"
-            >
-              Delete
-            </button>
+            <div>
+              <button className="btn btn-outline-secondary mx-1" onClick={() => updateUser(user)} >Update</button>
+              <button
+                onClick={() => deleteUser(user)}
+                className="btn btn-outline-danger"
+              >
+                Delete
+              </button>
+            </div>
           </li>
         ))}
       </ul>
