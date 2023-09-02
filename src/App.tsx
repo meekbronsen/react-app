@@ -12,13 +12,12 @@ function App() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    // A clean up function to cancel fetch requests incase the data is no longer needed
-    const controller = new AbortController(); // A new builtin class that allows to cancel or abort asynchronous operations ( DOM operations, fetch requests)
+    const controller = new AbortController();
 
     axios
       .get<User[]>("https://jsonplaceholder.typicode.com/users", {
         signal: controller.signal,
-      }) // the second argument is a request config object
+      })
       .then((response) => {
         setUsers(response.data);
         setLoading(false);
@@ -28,24 +27,38 @@ function App() {
         setError(err.message);
         setLoading(false);
       });
-    // The finally method will be executed when the promise is settled (resolved or rejected). It is just here to avoid duplication of setLoading state
-    // .finally(() => {setLoading(false)});
 
     return () => controller.abort();
   }, []);
 
-  // Optimistic Update
   const deleteUser = (user: User) => {
-      const originalUsers = [...users]
-
-    // Updating the ui
+    const originalUsers = [...users];
     setUsers(users.filter((i) => i.id !== user.id));
-    // Calling the server to save the changes
     axios
       .delete("https://jsonplaceholder.typicode.com/users/" + user.id)
       .catch((err) => {
         setError(err.message);
-        // If we catch an error, we display err.message and reset to original users list
+        setUsers(originalUsers);
+      });
+  };
+
+  // Still Using Optimistic update changing the UI first
+  const addUser = () => {
+    const originalUsers = [...users]; // storing the originallist of users in a new list.
+    const newUser = {
+      id: 0,
+      name: "Meek",
+    };
+    setUsers([newUser, ...users]);
+    // Updating tthe data on the server
+    axios
+      .post("https://jsonplaceholder.typicode.com/users/", newUser)
+      // .then((response) => setUsers([response.data, ...users]))
+      // another way to rewrite the code above, is by destructuring the response object and extracting the data object
+      // the savedUser is a variable that data is using, we do this because there can be many response data and data is  generic name
+      .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
+      .catch((err) => {
+        setError(err.message);
         setUsers(originalUsers);
       });
   };
@@ -54,13 +67,15 @@ function App() {
     <>
       {error && <p className="text-danger">{error}</p>}
       {isLoading && <div className="spinner-border"></div>}
-      {users.map((user) => (
-        <ul className="list-group">
+      <button className="btn btn-primary mb-3" onClick={addUser}>
+        Add
+      </button>
+      <ul className="list-group">
+        {users.map((user) => (
           <li
             key={user.id}
             className="list-group-item d-flex justify-content-between"
           >
-            {/* the deleteUserfunction */}
             <p>{user.id}</p>
             {user.name}
             <button
@@ -70,8 +85,8 @@ function App() {
               Delete
             </button>
           </li>
-        </ul>
-      ))}
+        ))}
+      </ul>
     </>
   );
 }
