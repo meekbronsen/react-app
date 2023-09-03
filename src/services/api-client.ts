@@ -13,7 +13,6 @@ export default axios.create({
        // some servers may require to pass an api key with every HTTP request
     //     'api-key': '...'
     // }
-
 })
 
 export {CanceledError}
