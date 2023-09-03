@@ -1,5 +1,5 @@
-import axios, { CanceledError } from "axios";
 import { useEffect, useState } from "react";
+import apiClient, {CanceledError} from "./services/api-client";
 
 interface User {
   id: number;
@@ -14,8 +14,8 @@ function App() {
   useEffect(() => {
     const controller = new AbortController();
 
-    axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/users", {
+    apiClient
+      .get<User[]>("/users", {
         signal: controller.signal,
       })
       .then((response) => {
@@ -34,8 +34,8 @@ function App() {
   const deleteUser = (user: User) => {
     const originalUsers = [...users];
     setUsers(users.filter((i) => i.id !== user.id));
-    axios
-      .delete("https://jsonplaceholder.typicode.com/users/" + user.id)
+    apiClient
+      .delete("/users/" + user.id)
       .catch((err) => {
         setError(err.message);
         setUsers(originalUsers);
@@ -49,14 +49,15 @@ function App() {
       name: "Meek",
     };
     setUsers([newUser, ...users]);
-    axios
-      .post("https://jsonplaceholder.typicode.com/users", newUser)
+    apiClient
+      .post("/users", newUser)
       .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
       .catch((err) => {
         setError(err.message);
         setUsers(originalUsers);
       });
   };
+
   // Updating users in the UI
   const updateUser = (user: User) => {
     const originalUsers = [...users]
@@ -65,7 +66,7 @@ function App() {
     
     // Now the server to save the changes
     // put and patch, we use the put method for replacing an object(could be a record), we use patch to update it's properties, some backend may not support the patch method
-    axios.patch('https://jsonplaceholder.typicode.com/users/' + user.id, updateUser) // we pass the updatedUser user as second argument to the patch method
+    apiClient.patch('/users/' + user.id, updateUser) // we pass the updatedUser user as second argument to the patch method
     .catch((err) => {
       setError(err.message);
       setUsers(originalUsers)
