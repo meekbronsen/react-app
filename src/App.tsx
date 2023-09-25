@@ -1,12 +1,9 @@
-import { useState } from "react";
-import Playground from "./playground";
-
+import TodoList from "./react-query/TodoList";
 
 function App() {
 
   return (
-    <>
-    </>
+    <TodoList/>
   );
 }
 
