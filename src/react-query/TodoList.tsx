@@ -1,35 +1,18 @@
 // We no longer need useState
-
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-
-interface Todos{
-    userId: number;
-    id: number;
-    title: string;
-    completed: boolean;
-}
+import useTodos from '../hooks/useTodos'
 
 function TodoList() {
+    const { data, error, isLoading} = useTodos()
     
-    // useQuery({ takes a config object }) 
-    // useQuery returns a query object and so we destructure it.
-    const { data } = useQuery({
-        // After the Todo[] array in  the promise function is resolved, the data is cached against queryKey
-        // With ['todos'] argument we are specifying the type of data we are fetching.
-        queryKey: ['todos'], // this key is unique and it used to unlock the cabinet where the data is being stored in the backend.
-        queryFn: () => { // This function is what is used to fetch data from the backend or throw an error.
-            return axios
-            // We should be more specific of what is expected from the promise instead of <any>.
-              .get<Todos[]>('https://jsonplaceholder.typicode.com/todos')
-              .then((res) =>{ return res.data} );
-        }
-    })
+    if (isLoading) return <p>Loading...</p>
+    if (error) return <p>{error.message}</p>
 
   return (
     <>
-    <ul>
-        {data?.map((todo) => <li key={todo.id} >{todo.title}</li> )}
+    <ul className="list-group">
+        {data?.map((todo) => <li className="list-group-item" key={todo.id} >{todo.title}</li> )}
     </ul>
     </>
     
