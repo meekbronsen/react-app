@@ -1,24 +1,32 @@
-import { useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import usePosts from '../hooks/usePosts';
+import React from 'react';
 
 const PostList = () => {
   const pageSize = 10;
-  const [page, setPage] = useState(1);
-  const { data: posts , error} = usePosts({pageSize, page});
+  // the useInfiniteQuery returns fetchNextPage and isFetchingNextPage from it's object
+  // The fetchNextPage function below will execute getNextPageParam
+  // isFetchingNextPage is boolean returned from useInfiniteQuery
+  const { data: posts, error, fetchNextPage, isFetchingNextPage} = usePosts({pageSize});
 
   if (error) return <p>{error.message}</p>;
 
   return (
     <>
     <ul className="list-group">
-      {posts?.map((post) => (
-        <li key={post.id} className="list-group-item">
-          {post.title}
-        </li>
+      {posts?.pages.map((page, index) => ( 
+        <React.Fragment key={index}>
+          {page.map((post) => (
+            <li key={post.id} className='list-group-item'>
+              {post.title}
+            </li>
+          ))}
+        </React.Fragment>
       ))}
     </ul>
-    <button disabled={page === 1 } onClick={() => setPage(page-1)} className="btn btn-primary mt-3">Previous</button>
-    <button onClick={() => setPage(page+1)} className="btn btn-primary mt-3 ms-2">Next</button>
+    <button disabled={isFetchingNextPage} onClick={()=> fetchNextPage()} className="btn btn-primary">{
+      isFetchingNextPage ? <div className="spinner-border text-light" role="status"><span className="visually-hidden"> Loading... </span></div> : "Load More"}
+    </button>
     </>
   );
 };
