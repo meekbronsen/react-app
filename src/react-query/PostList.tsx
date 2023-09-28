@@ -1,4 +1,3 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
 import usePosts from '../hooks/usePosts';
 import React from 'react';
 
