@@ -3,30 +3,43 @@ import { useRef } from 'react';
 import { Todos } from '../hooks/useTodos';
 import axios from 'axios';
 
+interface AddTodoContext{
+  previousTodos: Todos[]
+}
+
 const TodoForm = () => {
-  const queryClient = useQueryClient(); // Used to get access to the QueryClient.
-  const addTodo = useMutation({ // This is a mutation Hook from react query.
+  const queryClient = useQueryClient(); 
+
+  const addTodo = useMutation<Todos, Error, Todos, AddTodoContext>({ 
     mutationFn: (todo: Todos) => {
       return axios
         .post<Todos>('https://jsonplaceholder.typicode.com/todos', todo)
-        .then(res => { return res.data})
+        .then(res => { return res.data })
     },
-    // onSuccess: // Is called if the request goes well
-    // onError: // If something goes wrong
-    // onSettled: // whether the request is succesful or not
-    onSuccess: ( data, newTodo )  => {// data is the object that we get from the backend, newTodo is the object that we send to the server
-      // You could Invalidate the cache here inorder to get the updated version
-      // return queryClient.invalidateQueries({
-      //   queryKey: ['todos'] // will invalidate all queries whose start with todo
-      // })
+    // Using onMutate, we are updating the query cache right away before mutation
+    onMutate: (newTodo: Todos) => {
+      const previousTodos = queryClient.getQueryData<Todos[]>(['todos']) || [];
+      queryClient.setQueryData<Todos[]>(['todos'], todos => [newTodo, ...(todos || [])]);
+      return { previousTodos };
+    },
 
-      // You could update the data in the cache directly
-      return queryClient.setQueryData<Todos[]>(['todos'], todos => [data, ...(todos || []) ] )
+    onSuccess: (savedTodo, newTodo)=> {
+      queryClient.setQueryData<Todos[]>(['todos'],(todos) => todos?.map((todo) => todo === newTodo ? savedTodo : todo))
+    },
+
+    // Context is the previous data 
+    onError: (error, newTodo, context) => {
+      if (!context) return;
+      queryClient.setQueryData<Todos[]>(['todos'],context.previousTodos)
     }
   })        
+
   const ref = useRef<HTMLInputElement>(null);
+  if (ref.current) ref.current.value = '';
 
   return (
+  <>
+    { addTodo.error && <div className='alert alert-danger'> {addTodo.error.message} </div>}
     <form className="row mb-3" onSubmit={(event) => {
       event.preventDefault();
 
@@ -42,9 +55,12 @@ const TodoForm = () => {
         <input ref={ref} type="text" className="form-control" />
       </div>
       <div className="col">
-        <button className="btn btn-primary">Add</button>
+        <button className="btn btn-primary">
+          {addTodo.isLoading ? <div className="spinner-border text-light" role="status"></div>: "Add"}
+        </button>
       </div>
     </form>
+  </>
   );
 };
 

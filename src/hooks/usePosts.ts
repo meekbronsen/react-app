@@ -30,6 +30,7 @@ const usePosts = (query: PostQuery) => {
                 });
         },
         staleTime: 3 * 1000,
+        refetchOnWindowFocus: false,
         keepPreviousData: true,
         // getNextPageParams takes in two parameters.
         // allPages is a 2d array. It contains the data for all pages
