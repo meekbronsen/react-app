@@ -1,42 +1,13 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
-import { Todos } from '../hooks/useTodos';
-import axios from 'axios';
+import useAddTodo from '../hooks/useAddTodo';
 
-interface AddTodoContext{
-  previousTodos: Todos[]
-}
 
 const TodoForm = () => {
-  const queryClient = useQueryClient(); 
-
-  const addTodo = useMutation<Todos, Error, Todos, AddTodoContext>({ 
-    mutationFn: (todo: Todos) => {
-      return axios
-        .post<Todos>('https://jsonplaceholder.typicode.com/todos', todo)
-        .then(res => { return res.data })
-    },
-    // Using onMutate, we are updating the query cache right away before mutation
-    onMutate: (newTodo: Todos) => {
-      const previousTodos = queryClient.getQueryData<Todos[]>(['todos']) || [];
-      queryClient.setQueryData<Todos[]>(['todos'], todos => [newTodo, ...(todos || [])]);
-      return { previousTodos };
-    },
-
-    onSuccess: (savedTodo, newTodo)=> {
-      queryClient.setQueryData<Todos[]>(['todos'],(todos) => todos?.map((todo) => todo === newTodo ? savedTodo : todo))
-    },
-
-    // Context is the previous data 
-    onError: (error, newTodo, context) => {
-      if (!context) return;
-      queryClient.setQueryData<Todos[]>(['todos'],context.previousTodos)
-    }
-  })        
-
   const ref = useRef<HTMLInputElement>(null);
   if (ref.current) ref.current.value = '';
 
+  const {addTodo} = useAddTodo()
+  
   return (
   <>
     { addTodo.error && <div className='alert alert-danger'> {addTodo.error.message} </div>}
