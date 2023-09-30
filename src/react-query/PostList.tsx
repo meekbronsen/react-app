@@ -6,14 +6,14 @@ const PostList = () => {
   // the useInfiniteQuery returns fetchNextPage and isFetchingNextPage from it's object
   // The fetchNextPage function below will execute getNextPageParam
   // isFetchingNextPage is boolean returned from useInfiniteQuery
-  const { data: posts, error, fetchNextPage, isFetchingNextPage} = usePosts({pageSize});
+  const { data, error, fetchNextPage, isFetchingNextPage} = usePosts({pageSize});
 
   if (error) return <p>{error.message}</p>;
 
   return (
     <>
     <ul className="list-group">
-      {posts?.pages.map((page, index) => ( 
+      {data?.pages.map((page, index) => ( 
         <React.Fragment key={index}>
           {page.map((post) => (
             <li key={post.id} className='list-group-item'>

@@ -1,13 +1,13 @@
 import { useRef } from 'react';
 import useAddTodo from '../hooks/useAddTodo';
 
-
 const TodoForm = () => {
+
   const ref = useRef<HTMLInputElement>(null);
   if (ref.current) ref.current.value = '';
 
   const {addTodo} = useAddTodo()
-  
+
   return (
   <>
     { addTodo.error && <div className='alert alert-danger'> {addTodo.error.message} </div>}
