@@ -1,12 +1,11 @@
-import TodoForm from "./react-query/TodoForm";
 import TodoList from "./react-query/TodoList";
+import PostList from "./react-query/PostList";
+import Counter from "./state-management/Counter";
 
 function App() {
+
   return (
-    <>
-      <TodoForm/>
-      <TodoList/>
-    </>
+    <Counter></Counter>
   );
 }
 

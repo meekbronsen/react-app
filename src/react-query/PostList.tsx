@@ -1,32 +1,20 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import usePosts from '../hooks/usePosts';
-import React from 'react';
 
 const PostList = () => {
-  const pageSize = 10;
-  // the useInfiniteQuery returns fetchNextPage and isFetchingNextPage from it's object
-  // The fetchNextPage function below will execute getNextPageParam
-  // isFetchingNextPage is boolean returned from useInfiniteQuery
-  const { data, error, fetchNextPage, isFetchingNextPage} = usePosts({pageSize});
+  const { data: posts , error} = usePosts();
 
   if (error) return <p>{error.message}</p>;
 
   return (
-    <>
     <ul className="list-group">
-      {data?.pages.map((page, index) => ( 
-        <React.Fragment key={index}>
-          {page.map((post) => (
-            <li key={post.id} className='list-group-item'>
-              {post.title}
-            </li>
-          ))}
-        </React.Fragment>
+      {posts?.map((post) => (
+        <li key={post.id} className="list-group-item">
+          {post.title}
+        </li>
       ))}
     </ul>
-    <button disabled={isFetchingNextPage} onClick={()=> fetchNextPage()} className="btn btn-primary">{
-      isFetchingNextPage ? <div className="spinner-border text-light" role="status"><span className="visually-hidden"> Loading... </span></div> : "Load More"}
-    </button>
-    </>
   );
 };
 

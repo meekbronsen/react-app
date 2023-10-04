@@ -1,14 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import { CACHE_KEY_TODOS } from './constants';
-import APIClient from '../react-query/services/apiClient';
-import { Todos } from '../react-query/services/todoService';
-import apiClient from '../react-query/services/todoService';
+import axios from "axios"
+
+export interface Todos{
+    userId: number;
+    id: number;
+    title: string;
+    completed: boolean;
+}
 
 const useTodos = () => {
     return useQuery<Todos[], Error>({
-        queryKey: CACHE_KEY_TODOS,
-        queryFn: apiClient.get.bind(apiClient),  // Use the 'bind' to bind get method to apiClient 
+        queryKey: ['todos'],
+        queryFn: () => { 
+            return axios
+              .get<Todos[]>('https://jsonplaceholder.typicode.com/todos')
+              .then((res) =>{ return res.data} );
+        }
     })
+
 }
 
 export default useTodos;
