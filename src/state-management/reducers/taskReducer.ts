@@ -15,7 +15,7 @@ interface DeleteTask{
 }
 
 // action can now exist as either AddTask or DeleteTask we defined up Here
-type TaskAction = AddTask | DeleteTask;
+export type TaskAction = AddTask | DeleteTask;
 
 const tasksReducer = (tasks: Task[], action: TaskAction): Task[] => {
     if (action.type === "ADD") return [action.task, ...tasks]
