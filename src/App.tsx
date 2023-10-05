@@ -2,11 +2,12 @@ import { useReducer } from "react";
 import tasksReducer from "./state-management/reducers/taskReducer";
 import NavBar from "./state-management/NavBar";
 import HomePage from "./state-management/HomePage";
-import TasksContext from "./state-management/contexts/tasksContext";
+import TasksContext from "./state-management/contexts/TasksContext";
 import LoginStatus from "./state-management/LoginStatus";
-import authContext from "./state-management/contexts/authContext";
+import AuthContext from "./state-management/contexts/AuthContext";
 import loginStateReducer from "./state-management/reducers/loginStatusReducer";
 import TaskList from "./state-management/TaskList";
+import AuthProvider from "./state-management/AuthProvider";
 
 function App() {
   const [tasks, taskDispatch] = useReducer(tasksReducer, []);
@@ -14,12 +15,12 @@ function App() {
 
   return (
     <>
-      <authContext.Provider value={{ username, authDispatch }}>
+      <AuthProvider>
         <TasksContext.Provider value={{ tasks, taskDispatch }}>
           <LoginStatus />
-          <TaskList/>
+          <TaskList />
         </TasksContext.Provider>
-      </authContext.Provider>
+      </AuthProvider>
     </>
   );
 }

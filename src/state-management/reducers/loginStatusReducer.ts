@@ -1,9 +1,9 @@
-import { AuthAction } from "../contexts/authContext";
+import { AuthAction } from "../contexts/AuthContext";
 
-const loginStateReducer = (user: string, authAction: AuthAction): string => {
+const authReducer = (user: string, authAction: AuthAction): string => {
   if (authAction.type === "LOGOUT") return "";
   if (authAction.type === "LOGIN") return (user = authAction.username);
   return user;
 };
 
-export default loginStateReducer;
+export default authReducer;

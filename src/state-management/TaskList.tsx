@@ -1,17 +1,18 @@
-import { useContext, useReducer, useState } from 'react';
-import tasksReducer from './reducers/taskReducer';
-import TasksContext from './contexts/tasksContext';
-import authContext from './contexts/authContext';
+import { useContext } from "react";
+import TasksContext from "./contexts/TasksContext";
+import authContext from "./contexts/AuthContext";
 
 const TaskList = () => {
-
-  const { tasks,  taskDispatch: dispatch} = useContext(TasksContext);
-  const { username} = useContext(authContext);
+  const { tasks, taskDispatch: dispatch } = useContext(TasksContext);
+  const { username } = useContext(authContext);
   return (
     <>
       <button
         onClick={() =>
-          dispatch({ type:"ADD", task: { id: Date.now(), title: 'Task ' + Date.now()}})
+          dispatch({
+            type: "ADD",
+            task: { id: Date.now(), title: "Task " + Date.now() },
+          })
         }
         className="btn btn-primary my-3"
       >
@@ -27,9 +28,7 @@ const TaskList = () => {
             <span className="flex-grow-1">{task.title}</span>
             <button
               className="btn btn-outline-danger"
-              onClick={() =>
-                dispatch({type: "DELETE", taskId: task.id})
-              }
+              onClick={() => dispatch({ type: "DELETE", taskId: task.id })}
             >
               Delete
             </button>
