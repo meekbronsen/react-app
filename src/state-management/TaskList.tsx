@@ -1,11 +1,12 @@
 import { useContext, useReducer, useState } from 'react';
 import tasksReducer from './reducers/taskReducer';
 import TasksContext from './contexts/tasksContext';
+import authContext from './contexts/authContext';
 
 const TaskList = () => {
 
-  const { tasks,  dispatch} = useContext(TasksContext);
-  
+  const { tasks,  taskDispatch: dispatch} = useContext(TasksContext);
+  const { username} = useContext(authContext);
   return (
     <>
       <button
@@ -16,6 +17,7 @@ const TaskList = () => {
       >
         Add Task
       </button>
+      {username}
       <ul className="list-group">
         {tasks.map((task) => (
           <li
