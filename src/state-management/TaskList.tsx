@@ -3,8 +3,9 @@ import TasksContext from "./contexts/TasksContext";
 import authContext from "./contexts/AuthContext";
 
 const TaskList = () => {
-  const { tasks, taskDispatch: dispatch } = useContext(TasksContext);
+  const { tasks, dispatch } = useContext(TasksContext);
   const { username } = useContext(authContext);
+  
   return (
     <>
       <button

@@ -8,18 +8,17 @@ import AuthContext from "./state-management/contexts/AuthContext";
 import loginStateReducer from "./state-management/reducers/loginStatusReducer";
 import TaskList from "./state-management/TaskList";
 import AuthProvider from "./state-management/AuthProvider";
+import TaskProvider from "./state-management/TasksProvider";
 
 function App() {
-  const [tasks, taskDispatch] = useReducer(tasksReducer, []);
-  const [username, authDispatch] = useReducer(loginStateReducer, "");
 
   return (
     <>
       <AuthProvider>
-        <TasksContext.Provider value={{ tasks, taskDispatch }}>
+        <TaskProvider>
           <LoginStatus />
-          <TaskList />
-        </TasksContext.Provider>
+          <TaskList/>
+        </TaskProvider>
       </AuthProvider>
     </>
   );
