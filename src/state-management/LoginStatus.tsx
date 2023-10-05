@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import AuthContext from "./contexts/AuthContext";
+import useAuth from "./hooks/useAuth";
 
 const LoginStatus = () => {
-  const { username, dispatch } = useContext(AuthContext);
-
+ const {username, dispatch} = useAuth();
+ 
   if (username)
     return (
       <>
