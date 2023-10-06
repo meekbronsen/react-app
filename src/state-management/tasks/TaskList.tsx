@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import TasksContext from "./TasksContext";
-import authContext from "../auth/AuthContext";
+import useAuthStore from "../auth/store";
 
 const TaskList = () => {
   const { tasks, dispatch } = useContext(TasksContext);
-  const { username } = useContext(authContext);
+  const { user } = useAuthStore();
 
   return (
     <>
@@ -19,7 +19,7 @@ const TaskList = () => {
       >
         Add Task
       </button>
-      {username}
+      {user}
       <ul className="list-group">
         {tasks.map((task) => (
           <li
